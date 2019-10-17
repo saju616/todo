@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign into your account</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="google-signin-client_id" content="524799432922-1jdaroc0gncph6fgbjn8hvn9muf0n97g.apps.googleusercontent.com">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="index.js"></script>
+	
+	<style>
+	    
+	    .drag-icon{
+			color:#888;
+			position: relative;
+		}
+
+		#myList .card{
+			width: 93%;
+			margin-left: 5px;
+			display: inline-block;
+		}
+	    
+	    body{
+	        min-height: 700px;
+	    }
+	    
+		.data{
+			display: none;
+		}
+		
+		#signout{
+		    display: none;
+		}
+		.remove-btn{
+			float: right;
+    		padding: 0px 15px 2px;
+		}
+
+		.card input[type="checkbox"]{
+			width: 20px;
+			height: 20px;
+			position: relative;
+			top: 5px;
+		}
+
+		.body-container{
+			padding: 30px;
+		}
+
+		.done .todo-text{
+			text-decoration: line-through;
+		}
+		@media only screen and (max-width : 768px) {
+			#myList i{
+				display: none;
+			}
+		}
+	</style>
+
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		  <a class="navbar-brand" href="#">To do list</a>
+		  
+		    <span class="navbar-text ml-auto">
+		        <div class="g-signin2" data-onsuccess="onSignIn" id="signin">Sign in with Google</div>
+		      <button class="btn btn-danger"  id="signout">Signout</button>
+		    </span>
+		  </div>
+		</nav>
+	</header>
+	
+	<div class="container mt-5" id="before-signin">
+	    <div class="row">
+	        <div class="col-md-8 offset-md-2 mb-5 mt-5">
+	            <h4 class="mt-5">Please sign in to view and add your todo list items..</h4>
+	       </div>
+	    </div>
+	</div>
+	
+	<div class="data">
+
+    	<div class="container body-container mt-5 mt-5">
+    		<div class="row">
+    			<div class="col-md-8 offset-md-2 mb-5">
+    				<h3 id="welcome-msg"></h3>
+    			</div>
+    		</div>
+    		<form action="#">
+    			<div class="row">
+    				<div class="col-md-8 offset-md-1 mb-2">
+    					<input type="text" name="add-todo" id="add-todo" class="form-control" placeholder="Add new task">
+    				</div>
+    				<div class="col-md-2 mb-2">
+    					<button class="btn btn-primary btn-block" id="addBtn">Add todo</button>
+    				</div>
+    			</div>
+    		</form>
+    	</div>
+    
+    	<div class="container body-container mt-5">
+    		<div class="row">
+    			<div class="col-md-8 offset-md-2 mt-3">
+    				<h3 class="mb-4 text-muted">To do lists</h3>
+    			</div>
+    		</div>
+    		<div class="row" id="myList">
+    			<div class="col-md-8 offset-md-2 mt-3 todo-item">
+    			    <i class="fa fa-bars drag-icon" aria-hidden="true"></i>
+    				<div class="card">
+    					<div class="card-body">
+    						<div class="card-text">
+    							<input type="checkbox" class="check"><span class="ml-3 todo-text">first task</span><button class="btn btn-danger remove-btn rmvBtn">x</button>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="col-md-8 offset-md-2 mt-3 todo-item">
+    			    <i class="fa fa-bars drag-icon" aria-hidden="true"></i>
+    				<div class="card">
+    					<div class="card-body">
+    						<div class="card-text">
+    							<input type="checkbox" class="check"><span class="ml-3 todo-text">Second task</span><button class="btn btn-danger remove-btn rmvBtn">x</button>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="col-md-8 offset-md-2 mt-3 todo-item">
+    			    <i class="fa fa-bars drag-icon" aria-hidden="true"></i>
+    				<div class="card">
+    					<div class="card-body">
+    						<div class="card-text">
+    							<input type="checkbox" class="check"><span class="ml-3 todo-text">third task</span><button class="btn btn-danger remove-btn rmvBtn">x</button>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+	
+	</div>
+	
+    <script>
+        function onSignIn(googleuser){       
+		    const googleUser = gapi.auth2.getAuthInstance().currentUser.get();
+			var profile=googleUser.getBasicProfile();
+			$('#before-signin').css("display","none");
+			$(".g-signin2").css("display","none");
+			$("#signout").css("display","block");
+			$(".data").css("display","block");
+			$(".data").attr('src',profile.getImageUrl());
+			$("#email").text(profile.getEmail());
+			$("#welcome-msg").text('Welcome' +' ' + profile.getEmail());
+		}
+		$( function() {
+		    $( "#myList" ).sortable();
+		    $( "#myList" ).disableSelection();
+		  } );
+    </script>
+</body>
+</html>
